@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#efece2" />
+  <meta name="description" content="在宣纸与墨尘之间 走近一件数字藏品" />
+  <link rel="preload" href="/fonts/ZhaoguBrush.woff?v=3" as="font" type="font/woff" crossorigin />
+  <link rel="preload" href="/models/artifact.glb" as="fetch" crossorigin />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='5' y='5' width='54' height='54' rx='3' fill='%23953e2e'/%3E%3Cpath d='M17 18h30v28H17Zm10 0v28m10-28v28M17 31h30' fill='none' stroke='%23efece2' stroke-width='3'/%3E%3C/svg%3E" />
+  <title>照古 数字藏品画卷</title>
+</head>
+<body>
+  <div class="paper-grain" aria-hidden="true"></div>
+  <div id="app">
+    <header class="site-header">
+      <a class="brand" href="#gallery" aria-label="照古数字展厅首页"><span class="seal" aria-hidden="true">藏</span><span class="brand-name">照古</span><span class="brand-en">ZHAOGU<br>FORM IN TIME</span></a>
+      <nav aria-label="主导航"><a href="#gallery" aria-current="page">入卷观物</a><button data-dialog="archive">藏品档案</button><button data-dialog="guide">观赏指南</button></nav>
+      <span class="edition">数字藏品 第二卷<span class="edition-line"></span>002</span>
+    </header>
+
+    <main id="gallery" class="gallery">
+      <section id="stage" class="stage" aria-label="三维藏品 拖动旋转 双指缩放">
+        <div class="stage-label"><span class="tiny-seal">卷</span><span>时光有形</span><small>A STUDY OF FORM</small></div>
+        <div class="ink-disc" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="stage-calligraphy" aria-hidden="true"><span>观形</span><span>见微</span></div>
+        <div class="formation-status"><span id="formation-phase">等待展卷</span><div class="formation-track"><i id="formation-progress"></i></div></div>
+        <div id="canvas-mount"></div>
+        <canvas id="arrival-particles" aria-hidden="true"></canvas>
+        <div id="loading" class="loading" role="status" aria-live="polite"><span class="loading-orbit"></span><span id="loading-label">展卷之间</span><span id="loading-percent">已载入 0</span><div class="loading-track"><i id="loading-bar"></i></div></div>
+        <div id="error" class="error-message" hidden role="alert"><p id="error-text"></p><button id="retry">重新载入</button></div>
+        <div class="object-caption"><span>含钱金蟾 数字造型</span><small>DIGITAL OBJECT IN A NEW LIGHT</small></div>
+        <div class="stage-tools" role="group" aria-label="藏品交互控制"><button id="rotate" aria-label="暂停自动旋转" aria-pressed="true" disabled><svg viewBox="0 0 24 24"><path d="M8 6v12M16 6v12"/></svg></button><button id="scatter" aria-label="散开粒子" aria-pressed="false" disabled><svg viewBox="0 0 24 24"><path d="M9 9 4 4m11 5 5-5M9 15l-5 5m11-5 5 5M4 8V4h4m8 0h4v4M4 16v4h4m8 0h4v-4"/></svg></button><button id="reset" aria-label="重置视角" disabled><svg viewBox="0 0 24 24"><path d="M5 8a8 8 0 1 1-1 8M5 3v5h5"/></svg></button></div>
+        <div class="stage-hint"><svg class="gesture-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18M7 8l-4 4 4 4m10-8 4 4-4 4"/></svg>拖动旋转<span></span>滚轮或双指缩放</div>
+      </section>
+
+      <section class="introduction" aria-labelledby="main-title">
+        <div class="eyebrow"><span class="hairline"></span>一件藏品 一段凝视</div>
+        <h1 id="main-title">金蟾入画<br>万象新生</h1>
+        <p class="english-title">GILDED INTO FORM<br>TIME INTO LIGHT</p>
+        <p class="intro-copy">让万缕光丝 凝成旧时之形<br>让流金走过 纹理再次苏醒</p>
+        <div class="mode-section"><span class="small-label">观物之法 <small>VIEW MODE</small></span><div class="mode-switch" role="group" aria-label="观看方式"><button class="mode active" data-mode="points" aria-pressed="true" disabled><i class="mode-dot"></i>鎏金铸形</button><button class="mode" data-mode="solid" aria-pressed="false" disabled><i class="mode-square"></i>模型原貌</button></div></div>
+        <button id="replay" class="primary-action" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18M6 6l12 12M18 6 6 18"/></svg><span id="replay-label">正在展卷</span><svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></button>
+        <div class="intro-footnote"><span class="small-seal" aria-hidden="true">照<br>古</span><span>旧形新境<small>每一次凝视 都是重新发现</small></span></div>
+      </section>
+    </main>
+
+    <footer class="gallery-footer"><div class="footer-intro"><span class="footer-title">形藏于物 境生于心</span><small>LOOK CLOSER FEEL FURTHER</small></div><div class="footer-stat"><span class="stat-number">360</span><span>自由观赏<small>TURN AND DISCOVER</small></span></div><div class="footer-stat"><span class="stat-number" id="point-count">待显</span><span>鎏金铸形<small>A FIELD OF LIGHT</small></span></div><button class="footer-link" data-dialog="archive">打开藏品档案<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 19 14-14M8 5h11v11"/></svg></button></footer>
+    <div class="process-strip" aria-hidden="true"><span><i>一</i>金尘四散</span><b></b><span><i>二</i>光丝汇流</span><b></b><span><i>三</i>鎏金铸形</span></div>
+    <div id="announcement" class="sr-only" role="status" aria-live="polite"></div>
+  </div>
+
+  <dialog id="archive" class="info-dialog" aria-labelledby="archive-title"><button class="dialog-close" aria-label="关闭藏品档案">收起</button><span class="eyebrow">OBJECT ARCHIVE 002</span><h2 id="archive-title">一件藏品的数字形态</h2><p>此画卷使用你新提供的三维模型<br>保留其含钱金蟾造型与纹理特征</p><dl><div><dt>展示素材</dt><dd>含钱金蟾造型 数字模型</dd></div><div><dt>观赏方式</dt><dd>鎏金铸形 模型原貌</dd></div><div><dt>交互方式</dt><dd>旋转 缩放 散开 聚合</dd></div><div><dt>名称年代与出处</dt><dd>待补充资料</dd></div></dl><p class="dialog-note">造型描述根据模型外观<br>具体藏品信息以真实资料为准</p></dialog>
+  <dialog id="guide" class="info-dialog" aria-labelledby="guide-title"><button class="dialog-close" aria-label="关闭观赏指南">收起</button><span class="eyebrow">WAYS OF SEEING</span><h2 id="guide-title">慢一点 走近一件藏品</h2><ol><li><b>转动目光</b><span>拖动模型查看不同角度<br>滚轮或双指缩放</span></li><li><b>切换形态</b><span>鎏金铸形呈现粒子成形<br>模型原貌呈现纹理细节</span></li><li><b>重新展卷</b><span>重演鎏金铸形<br>看金尘四散 再沿光丝凝结</span></li><li><b>留住一瞬</b><span>暂停自动旋转 仔细观察<br>重置视角回到起点</span></li></ol></dialog>
+  <script>
+  (()=>{
+    const canvas=document.getElementById('arrival-particles'),stage=document.getElementById('stage'),ctx=canvas.getContext('2d');
+    if(!ctx)return;
+    const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const start=performance.now();
+    function draw(now){
+      if(canvas.dataset.complete){canvas.remove();return}
+      const w=stage.clientWidth,h=stage.clientHeight;
+      if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h}
+      ctx.clearRect(0,0,w,h);const t=reduced?0:(now-start)/1000;
+      for(let i=0;i<200;i++){const angle=i*2.399+t*.15,r=(i%53)/53;const x=w/2+Math.cos(angle)*w*.4*r,y=h/2+Math.sin(angle)*h*.23*r;ctx.fillStyle=i%3?'#426658':'#9e5135';ctx.globalAlpha=.2+(i%7)/18;ctx.beginPath();ctx.arc(x,y,.7+i%4*.35,0,Math.PI*2);ctx.fill()}
+      requestAnimationFrame(draw)
+    }requestAnimationFrame(draw)
+  })();
+  </script>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
